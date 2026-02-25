@@ -3,6 +3,7 @@
 import optimat
 import optimat.compile.bqm
 import optimat.compile.cpsat
+import optimat.config
 import optimat.io.yaml
 import optimat.spec.problem
 

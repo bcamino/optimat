@@ -1,0 +1,45 @@
+project:
+  name: brass_test
+  output_dir: results/
+
+structure:
+  file: data/structures/brass.cif
+  periodic: true
+
+# ---------------------------------------
+# Occupancy: define *which* sites vary, how,
+# and with what composition constraints.
+# ---------------------------------------
+occupancy:
+  # Each group is an independent “bucket” of sites
+  # with its own allowed species + composition rule.
+  site_groups:
+    - name: substitutional_bulk
+      indices: [0, 1, 2, 3]     # explicit sites in the structure
+      allowed_species: [Mg, Ca]
+      composition:
+        mode: counts                        # counts | fractions
+        counts:
+          Mg: 2
+          Ca: 2
+
+    - name: fixed_sites
+      indices: [4, 5, 6, 7]
+      allowed_species: [O]                 # trivially fixed (still explicit)
+      composition:
+        mode: counts
+        counts:
+          O: 4
+
+energy_model:
+  type: cluster_expansion
+  parameters_file: data/models/brass_ce.json
+
+optimisation:
+  objective: minimize_energy
+
+solver:
+  backend: cp-sat
+  cp_sat:
+    time_limit: 60
+    num_workers: 8

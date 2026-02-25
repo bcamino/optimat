@@ -82,3 +82,30 @@ def validate_config(config: OptimatConfig) -> None:
             raise ConfigError("solver.cp_sat.time_limit must be > 0")
         if config.solver.cp_sat.num_workers < 1:
             raise ConfigError("solver.cp_sat.num_workers must be >= 1")
+
+    if config.energy_model.type == "buckingham_ewald":
+        if not config.energy_model.species:
+            raise ConfigError("energy_model.species is required for energy_model.type == 'buckingham_ewald'")
+        if config.energy_model.buckingham is None:
+            raise ConfigError("energy_model.buckingham is required for energy_model.type == 'buckingham_ewald'")
+        if config.energy_model.ewald is None:
+            raise ConfigError("energy_model.ewald is required for energy_model.type == 'buckingham_ewald'")
+
+    if config.energy_model.buckingham is not None:
+        if config.energy_model.buckingham.cutoff <= 0:
+            raise ConfigError("energy_model.buckingham.cutoff must be > 0")
+        if not config.energy_model.buckingham.parameters:
+            raise ConfigError("energy_model.buckingham.parameters must be non-empty")
+
+    if config.energy_model.ewald is not None:
+        if config.energy_model.ewald.engine != "pymatgen":
+            raise ConfigError("energy_model.ewald.engine must be 'pymatgen' (v1)")
+        if config.energy_model.ewald.mode not in {"auto", "manual"}:
+            raise ConfigError("energy_model.ewald.mode must be 'auto' or 'manual'")
+        if config.energy_model.ewald.mode == "manual":
+            if config.energy_model.ewald.real_space_cut is None:
+                raise ConfigError("energy_model.ewald.real_space_cut is required in manual mode")
+            if config.energy_model.ewald.recip_space_cut is None:
+                raise ConfigError("energy_model.ewald.recip_space_cut is required in manual mode")
+            if config.energy_model.ewald.eta is None:
+                raise ConfigError("energy_model.ewald.eta is required in manual mode")

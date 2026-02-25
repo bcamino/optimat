@@ -3,37 +3,68 @@ project:
   output_dir: results/
 
 structure:
-  file: data/structures/brass.cif
+  file: dev_data/test_structure.cif
   periodic: true
 
-# ---------------------------------------
-# Occupancy: define *which* sites vary, how,
-# and with what composition constraints.
-# ---------------------------------------
 occupancy:
-  # Each group is an independent “bucket” of sites
-  # with its own allowed species + composition rule.
   site_groups:
     - name: substitutional_bulk
-      indices: [0, 1, 2, 3]     # explicit sites in the structure
+      indices: [0, 1, 2, 3]
       allowed_species: [Mg, Ca]
       composition:
-        mode: counts                        # counts | fractions
+        mode: counts
         counts:
           Mg: 2
           Ca: 2
 
     - name: fixed_sites
       indices: [4, 5, 6, 7]
-      allowed_species: [O]                 # trivially fixed (still explicit)
+      allowed_species: [O]
       composition:
         mode: counts
         counts:
           O: 4
 
 energy_model:
-  type: cluster_expansion
-  parameters_file: data/models/brass_ce.json
+  type: buckingham_ewald
+
+  # --- Species properties used by the model ---
+  species:
+    Mg:
+      charge: 2.0
+    Ca:
+      charge: 2.0
+    O:
+      charge: -2.0
+
+  # --- Buckingham parameters (pairwise) ---
+  buckingham:
+    cutoff: 12.0          # Angstrom
+    smoothing:
+      enabled: false      # v1: keep simple
+
+    # Parameters are per species pair.
+    # Convention: A * exp(-r / rho) - C / r^6
+    # Units must match your legacy implementation.
+    parameters:
+      Mg-O: {A: 821.6, rho: 0.3242, C: 0.0}
+      Ca-O: {A: 1000.0, rho: 0.3000, C: 0.0}
+      O-O:  {A: 22.410, rho: 0.6937, C: 32.32}
+      Mg-Mg: {A: 0.0, rho: 1.0, C: 0.0}
+      Ca-Ca: {A: 0.0, rho: 1.0, C: 0.0}
+      Mg-Ca: {A: 0.0, rho: 1.0, C: 0.0}
+
+  # --- Long-range electrostatics ---
+  ewald:
+    engine: pymatgen
+    # Pymatgen can estimate parameters or you can specify them.
+    mode: auto            # auto | manual
+    accuracy: 1.0e-8      # used when mode=auto
+
+    # If mode=manual, provide these (names chosen by us; map in code):
+    # real_space_cut: 12.0
+    # recip_space_cut: 12.0
+    # eta: 0.25
 
 optimisation:
   objective: minimize_energy

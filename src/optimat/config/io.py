@@ -9,15 +9,20 @@ from pathlib import Path
 from typing import Any
 
 from .schema import (
+    BuckinghamConfig,
+    BuckinghamPairConfig,
+    BuckinghamSmoothingConfig,
     CompositionCounts,
     CpSatOptions,
     EnergyModelConfig,
+    EwaldConfig,
     OccupancyConfig,
     OptimatConfig,
     OptimisationConfig,
     ProjectConfig,
     SiteGroupConfig,
     SolverConfig,
+    SpeciesConfig,
     StructureConfig,
 )
 from .validate import ConfigError, validate_config
@@ -50,7 +55,8 @@ def parse_config(data: Any) -> OptimatConfig:
     """Parse and validate config from a Python mapping."""
     root = _expect_mapping(data, "<root>")
 
-    project_raw = _expect_mapping(_require_key(root, "project", "<root>"), "project")
+    project_key = "project" if "project" in root else "vproject" if "vproject" in root else "project"
+    project_raw = _expect_mapping(_require_key(root, project_key, "<root>"), project_key)
     structure_raw = _expect_mapping(_require_key(root, "structure", "<root>"), "structure")
     occupancy_raw = _expect_mapping(_require_key(root, "occupancy", "<root>"), "occupancy")
     energy_model_raw = _expect_mapping(_require_key(root, "energy_model", "<root>"), "energy_model")
@@ -118,10 +124,14 @@ def parse_config(data: Any) -> OptimatConfig:
 
     energy_model = EnergyModelConfig(
         type=_expect_str(_require_key(energy_model_raw, "type", "energy_model"), "energy_model.type"),
-        parameters_file=_expect_str(
-            _require_key(energy_model_raw, "parameters_file", "energy_model"),
-            "energy_model.parameters_file",
+        parameters_file=(
+            _expect_str(energy_model_raw["parameters_file"], "energy_model.parameters_file")
+            if "parameters_file" in energy_model_raw and energy_model_raw["parameters_file"] is not None
+            else None
         ),
+        species=_parse_species(energy_model_raw.get("species")),
+        buckingham=_parse_buckingham(energy_model_raw.get("buckingham")),
+        ewald=_parse_ewald(energy_model_raw.get("ewald")),
     )
 
     optimisation = OptimisationConfig(
@@ -183,3 +193,78 @@ def _expect_bool(value: Any, path: str) -> bool:
     if not isinstance(value, bool):
         raise ConfigError(f"{path} must be a boolean")
     return value
+
+
+def _expect_number(value: Any, path: str) -> float:
+    if not isinstance(value, (int, float)) or isinstance(value, bool):
+        raise ConfigError(f"{path} must be a number")
+    return float(value)
+
+
+def _parse_species(value: Any) -> dict[str, SpeciesConfig]:
+    if value is None:
+        return {}
+    raw = _expect_mapping(value, "energy_model.species")
+    species: dict[str, SpeciesConfig] = {}
+    for name, entry in raw.items():
+        entry_raw = _expect_mapping(entry, f"energy_model.species[{name!r}]")
+        species[name] = SpeciesConfig(
+            charge=_expect_number(
+                _require_key(entry_raw, "charge", f"energy_model.species[{name!r}]"),
+                f"energy_model.species[{name!r}].charge",
+            )
+        )
+    return species
+
+
+def _parse_buckingham(value: Any) -> BuckinghamConfig | None:
+    if value is None:
+        return None
+    raw = _expect_mapping(value, "energy_model.buckingham")
+    smoothing: BuckinghamSmoothingConfig | None = None
+    if "smoothing" in raw and raw["smoothing"] is not None:
+        smoothing_raw = _expect_mapping(raw["smoothing"], "energy_model.buckingham.smoothing")
+        smoothing = BuckinghamSmoothingConfig(
+            enabled=_expect_bool(
+                _require_key(smoothing_raw, "enabled", "energy_model.buckingham.smoothing"),
+                "energy_model.buckingham.smoothing.enabled",
+            )
+        )
+
+    parameters_raw = _expect_mapping(_require_key(raw, "parameters", "energy_model.buckingham"), "energy_model.buckingham.parameters")
+    parameters: dict[str, BuckinghamPairConfig] = {}
+    for pair_key, pair_value in parameters_raw.items():
+        pair_raw = _expect_mapping(pair_value, f"energy_model.buckingham.parameters[{pair_key!r}]")
+        parameters[pair_key] = BuckinghamPairConfig(
+            A=_expect_number(_require_key(pair_raw, "A", f"energy_model.buckingham.parameters[{pair_key!r}]"), f"energy_model.buckingham.parameters[{pair_key!r}].A"),
+            rho=_expect_number(_require_key(pair_raw, "rho", f"energy_model.buckingham.parameters[{pair_key!r}]"), f"energy_model.buckingham.parameters[{pair_key!r}].rho"),
+            C=_expect_number(_require_key(pair_raw, "C", f"energy_model.buckingham.parameters[{pair_key!r}]"), f"energy_model.buckingham.parameters[{pair_key!r}].C"),
+        )
+
+    return BuckinghamConfig(
+        cutoff=_expect_number(_require_key(raw, "cutoff", "energy_model.buckingham"), "energy_model.buckingham.cutoff"),
+        smoothing=smoothing,
+        parameters=parameters,
+    )
+
+
+def _parse_ewald(value: Any) -> EwaldConfig | None:
+    if value is None:
+        return None
+    raw = _expect_mapping(value, "energy_model.ewald")
+    return EwaldConfig(
+        engine=_expect_str(_require_key(raw, "engine", "energy_model.ewald"), "energy_model.ewald.engine"),
+        mode=_expect_str(_require_key(raw, "mode", "energy_model.ewald"), "energy_model.ewald.mode"),
+        accuracy=(_expect_number(raw["accuracy"], "energy_model.ewald.accuracy") if "accuracy" in raw and raw["accuracy"] is not None else None),
+        real_space_cut=(
+            _expect_number(raw["real_space_cut"], "energy_model.ewald.real_space_cut")
+            if "real_space_cut" in raw and raw["real_space_cut"] is not None
+            else None
+        ),
+        recip_space_cut=(
+            _expect_number(raw["recip_space_cut"], "energy_model.ewald.recip_space_cut")
+            if "recip_space_cut" in raw and raw["recip_space_cut"] is not None
+            else None
+        ),
+        eta=(_expect_number(raw["eta"], "energy_model.ewald.eta") if "eta" in raw and raw["eta"] is not None else None),
+    )

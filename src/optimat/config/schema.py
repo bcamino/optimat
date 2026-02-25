@@ -5,7 +5,7 @@ TODO: expand schema coverage and introduce richer typing/validation in later ver
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Literal
 
 
@@ -43,7 +43,44 @@ class OccupancyConfig:
 @dataclass(frozen=True)
 class EnergyModelConfig:
     type: str
-    parameters_file: str
+    parameters_file: str | None = None
+    species: dict[str, "SpeciesConfig"] = field(default_factory=dict)
+    buckingham: "BuckinghamConfig | None" = None
+    ewald: "EwaldConfig | None" = None
+
+
+@dataclass(frozen=True)
+class SpeciesConfig:
+    charge: float
+
+
+@dataclass(frozen=True)
+class BuckinghamPairConfig:
+    A: float
+    rho: float
+    C: float
+
+
+@dataclass(frozen=True)
+class BuckinghamSmoothingConfig:
+    enabled: bool = False
+
+
+@dataclass(frozen=True)
+class BuckinghamConfig:
+    cutoff: float
+    smoothing: BuckinghamSmoothingConfig | None = None
+    parameters: dict[str, BuckinghamPairConfig] = field(default_factory=dict)
+
+
+@dataclass(frozen=True)
+class EwaldConfig:
+    engine: str
+    mode: str
+    accuracy: float | None = None
+    real_space_cut: float | None = None
+    recip_space_cut: float | None = None
+    eta: float | None = None
 
 
 @dataclass(frozen=True)

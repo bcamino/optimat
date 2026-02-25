@@ -16,7 +16,7 @@ def test_read_yaml_parses_dev_input() -> None:
     config = read_yaml(Path("dev_data/input_test.yml"))
 
     assert config.project.name == "brass_test"
-    assert config.structure.file == "data/structures/brass.cif"
+    assert config.structure.file == "dev_data/test_structure.cif"
     assert len(config.occupancy.site_groups) == 2
 
     first_group = config.occupancy.site_groups[0]

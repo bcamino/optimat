@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "optimat"
+version = "0.1.0"
+description = "QUBO optimization project refactor scaffold"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "numpy",
+  "pyyaml",
+]
+
+[project.optional-dependencies]
+# Placeholder optional groups for future solver integrations.
+dwave = []
+ortools = []
+
+[project.scripts]
+optimat = "optimat.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]

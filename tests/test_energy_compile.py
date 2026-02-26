@@ -14,8 +14,8 @@ pytest.importorskip("pymatgen")
 
 
 def test_compile_energy_model_smoke() -> None:
-    config = read_yaml(Path("dev_data/input_test.yml"))
-    terms = compile_energy_model(config)
+    config, base_dir = read_yaml(Path("dev_data/input_test.yml"), return_base_dir=True)
+    terms = compile_energy_model(config, base_dir=base_dir)
 
     assert len(terms.pair) > 0
 

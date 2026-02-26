@@ -64,6 +64,8 @@ def compute_buckingham_pair_terms(
     """Compile Buckingham pair terms for model sites within the cutoff."""
     site_set = set(sites)
     terms: dict[tuple[int, int, str, str], float] = {}
+    required_species_pairs: set[tuple[str, str]] = set()
+    missing_species_pairs: set[tuple[str, str]] = set()
 
     center_indices, point_indices, _, distances = structure.get_neighbor_list(cutoff)
     for center_idx, point_idx, dist in zip(center_indices, point_indices, distances):
@@ -78,10 +80,17 @@ def compute_buckingham_pair_terms(
         for si in allowed_by_site[i]:
             for sj in allowed_by_site[j]:
                 pair_species = (si, sj) if si <= sj else (sj, si)
+                required_species_pairs.add(pair_species)
                 if pair_species not in params:
-                    raise ConfigError(f"Missing Buckingham parameters for pair {si}-{sj}")
+                    missing_species_pairs.add(pair_species)
+                    continue
                 A, rho, C = params[pair_species]
                 key = (i, j, si, sj)
                 terms[key] = terms.get(key, 0.0) + buckingham_energy(r, A, rho, C)
+
+    present_species_pairs = sorted(required_species_pairs - missing_species_pairs)
+    missing_species_pairs_sorted = sorted(missing_species_pairs)
+    print(f"Buckingham potentials present (used): {present_species_pairs}")
+    print(f"Buckingham potentials missing (treated as 0): {missing_species_pairs_sorted}")
 
     return terms

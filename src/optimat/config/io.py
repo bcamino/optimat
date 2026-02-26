@@ -29,7 +29,7 @@ from .validate import ConfigError, validate_config
 
 
 
-def read_yaml(path: str | Path) -> OptimatConfig:
+def read_yaml(path: str | Path, *, return_base_dir: bool = False) -> OptimatConfig | tuple[OptimatConfig, Path]:
     """Read and validate an optimat YAML config file."""
     try:
         import yaml
@@ -47,7 +47,10 @@ def read_yaml(path: str | Path) -> OptimatConfig:
     except yaml.YAMLError as exc:
         raise ConfigError(f"Invalid YAML in {file_path}: {exc}") from exc
 
-    return parse_config(raw)
+    config = parse_config(raw)
+    if return_base_dir:
+        return config, file_path.resolve().parent
+    return config
 
 
 

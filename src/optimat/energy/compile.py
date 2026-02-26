@@ -2,13 +2,19 @@
 
 from __future__ import annotations
 
+from collections.abc import Mapping, Sequence
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from optimat.config import ConfigError, OptimatConfig
 from optimat.energy.buckingham import build_buckingham_params, compute_buckingham_pair_terms
-from optimat.energy.ewald import compute_ewald_baseline_delta_terms
+from optimat.energy.ewald import compute_ewald_pair_terms_from_total_energy_matrix
 from optimat.energy.terms import EnergyTerms
 from optimat.structures.load import load_structure
+from optimat.util.paths import resolve_path
+
+if TYPE_CHECKING:
+    from pymatgen.core import Structure
 
 
 def build_allowed_species_by_site(config: OptimatConfig) -> tuple[dict[int, list[str]], list[int]]:
@@ -30,34 +36,54 @@ def build_allowed_species_by_site(config: OptimatConfig) -> tuple[dict[int, list
     return allowed_by_site, sorted(allowed_by_site)
 
 
-def compile_energy_model(config: OptimatConfig) -> EnergyTerms:
+def compile_energy_model(
+    config: OptimatConfig,
+    *,
+    base_dir: Path | None = None,
+    structure: "Structure | None" = None,
+    allowed_by_site: Mapping[int, Sequence[str]] | None = None,
+) -> EnergyTerms:
     """Compile Buckingham + Ewald pair terms from a parsed config."""
     if config.energy_model.type != "buckingham_ewald":
         raise ConfigError(f"Unsupported energy_model.type for compiler: {config.energy_model.type!r}")
     if config.energy_model.buckingham is None or config.energy_model.ewald is None:
         raise ConfigError("energy_model.buckingham and energy_model.ewald are required")
 
-    structure = load_structure(Path(config.structure.file))
-    allowed_by_site, model_sites = build_allowed_species_by_site(config)
+    structure_obj = structure
+    if structure_obj is None:
+        if base_dir is None:
+            structure_path = Path(config.structure.file)
+        else:
+            structure_path = resolve_path(config.structure.file, base_dir)
+        structure_obj = load_structure(structure_path)
+    else:
+        structure_path = resolve_path(config.structure.file, base_dir) if base_dir is not None else Path(config.structure.file)
+
+    if allowed_by_site is None:
+        allowed_map, model_sites = build_allowed_species_by_site(config)
+    else:
+        allowed_map = {int(i): list(species) for i, species in allowed_by_site.items()}
+        model_sites = sorted(allowed_map)
+
     if not model_sites:
         raise ConfigError("No model sites found in occupancy.site_groups")
-    if max(model_sites) >= len(structure):
+    if max(model_sites) >= len(structure_obj):
         raise ConfigError(
-            f"Occupancy site index {max(model_sites)} is out of range for structure with {len(structure)} sites"
+            f"Occupancy site index {max(model_sites)} is out of range for structure with {len(structure_obj)} sites"
         )
 
     buck_pair = compute_buckingham_pair_terms(
-        structure=structure,
+        structure=structure_obj,
         sites=model_sites,
-        allowed_by_site=allowed_by_site,
+        allowed_by_site=allowed_map,
         params=build_buckingham_params(config.energy_model.buckingham.parameters),
         cutoff=float(config.energy_model.buckingham.cutoff),
     )
     charges_by_species = {sp: float(spec.charge) for sp, spec in config.energy_model.species.items()}
-    ewald_pair = compute_ewald_baseline_delta_terms(
-        structure=structure,
+    ewald_pair = compute_ewald_pair_terms_from_total_energy_matrix(
+        structure=structure_obj,
         model_sites=model_sites,
-        allowed_by_site=allowed_by_site,
+        allowed_by_site=allowed_map,
         charges_by_species=charges_by_species,
         ewald_settings=config.energy_model.ewald,
     )
@@ -67,12 +93,13 @@ def compile_energy_model(config: OptimatConfig) -> EnergyTerms:
         pair_total[key] = pair_total.get(key, 0.0) + value
 
     meta = {
-        "structure_file": config.structure.file,
+        "structure_file": str(structure_path),
         "model_site_count": len(model_sites),
+        "model_sites": tuple(model_sites),
         "buckingham_cutoff": float(config.energy_model.buckingham.cutoff),
         "buckingham_neighbor_pairs": len({(i, j) for (i, j, _, _) in buck_pair}),
         "buckingham_pair_entries": len(buck_pair),
         "ewald_pair_entries": len(ewald_pair),
-        "ewald_compilation": "baseline_delta_approx_v1",
+        "ewald_compilation": "total_energy_matrix_unit_charge_kernel_v1",
     }
     return EnergyTerms(E0=0.0, onsite={}, pair=pair_total, meta=meta)

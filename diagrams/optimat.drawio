@@ -1,0 +1,141 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36" version="29.3.4" pages="2">
+  <diagram id="pkg-pipeline" name="Package Pipeline">
+    <mxGraphModel dx="699" dy="382" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="TwF8iF3bx_n1-9pj3OV_-3" edge="1" parent="1" source="TwF8iF3bx_n1-9pj3OV_-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="TwF8iF3bx_n1-9pj3OV_-2" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TwF8iF3bx_n1-9pj3OV_-1" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" value="&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;CIF structure&lt;/span&gt;&lt;/div&gt;&lt;div&gt;problem definition (frac occupancy)&lt;/div&gt;&lt;div&gt;energy model&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="160" x="690" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="TwF8iF3bx_n1-9pj3OV_-5" edge="1" parent="1" source="TwF8iF3bx_n1-9pj3OV_-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="TwF8iF3bx_n1-9pj3OV_-4" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TwF8iF3bx_n1-9pj3OV_-2" parent="1" style="whiteSpace=wrap;html=1;" value="from optimat.config import read_yaml&lt;div&gt;&lt;br&gt;&lt;div&gt;read_yaml&lt;/div&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="710" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="TwF8iF3bx_n1-9pj3OV_-7" edge="1" parent="1" source="TwF8iF3bx_n1-9pj3OV_-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="TwF8iF3bx_n1-9pj3OV_-6" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TwF8iF3bx_n1-9pj3OV_-4" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" value="OptimatConfig obj" vertex="1">
+          <mxGeometry height="60" width="120" x="710" y="310" as="geometry" />
+        </mxCell>
+        <mxCell id="TwF8iF3bx_n1-9pj3OV_-9" edge="1" parent="1" source="TwF8iF3bx_n1-9pj3OV_-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="TwF8iF3bx_n1-9pj3OV_-8" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TwF8iF3bx_n1-9pj3OV_-6" parent="1" style="whiteSpace=wrap;html=1;" value="&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;build_problem(&lt;/span&gt;OptimatConfig)" vertex="1">
+          <mxGeometry height="60" width="175" x="682.5" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="TwF8iF3bx_n1-9pj3OV_-11" edge="1" parent="1" source="TwF8iF3bx_n1-9pj3OV_-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="TwF8iF3bx_n1-9pj3OV_-10" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TwF8iF3bx_n1-9pj3OV_-13" edge="1" parent="1" source="TwF8iF3bx_n1-9pj3OV_-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="TwF8iF3bx_n1-9pj3OV_-12" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TwF8iF3bx_n1-9pj3OV_-15" edge="1" parent="1" source="TwF8iF3bx_n1-9pj3OV_-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="TwF8iF3bx_n1-9pj3OV_-14" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TwF8iF3bx_n1-9pj3OV_-8" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" value="CanonicalProblem (obj)" vertex="1">
+          <mxGeometry height="60" width="180" x="680" y="560" as="geometry" />
+        </mxCell>
+        <mxCell id="TwF8iF3bx_n1-9pj3OV_-10" parent="1" style="whiteSpace=wrap;html=1;" value="&lt;div&gt;&lt;span style=&quot;white-space: normal;&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;compile_to_cpsat(&lt;/span&gt;&lt;/div&gt;&lt;div&gt;CanonicalProblem&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;)&amp;nbsp;&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="710" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="TwF8iF3bx_n1-9pj3OV_-12" parent="1" style="whiteSpace=wrap;html=1;" value="&lt;div&gt;&lt;span style=&quot;white-space: normal;&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;compile_to_qubo(&lt;/span&gt;&lt;/div&gt;&lt;div&gt;CanonicalProblem&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;)&amp;nbsp;&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="900" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="TwF8iF3bx_n1-9pj3OV_-17" edge="1" parent="1" source="TwF8iF3bx_n1-9pj3OV_-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="TwF8iF3bx_n1-9pj3OV_-16" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TwF8iF3bx_n1-9pj3OV_-14" parent="1" style="whiteSpace=wrap;html=1;" value="compile_to_exact&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;(&lt;/span&gt;&lt;div&gt;CanonicalProblem&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;)&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="480" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="TwF8iF3bx_n1-9pj3OV_-16" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" value="exact_compiled (obj)" vertex="1">
+          <mxGeometry height="60" width="140" x="470" y="800" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="runtime-detail" name="QUBO + Exact Runtime">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="t2" value="Current implemented logic (core/problem.py, mapping.py, solvers/exact.py)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=20;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="30" y="20" width="760" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="vm" value="VariableMap&#xa;key_to_idx / idx_to_key&#xa;add_variable(key) -&gt; idx&#xa;encode(active_keys) -&gt; x (numpy)&#xa;decode(x) -&gt; active keys" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="40" y="90" width="330" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="xvec" value="Binary vector x (length n)&#xa;0/1 values indexed by VariableMap" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="420" y="125" width="240" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="qubo2" value="QUBOProblem&#xa;Fields: n, Q, offset, metadata&#xa;Q keys stored with i &lt;= j" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="720" y="80" width="320" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="addlin" value="add_linear(i,c)&#xa;delegates to add_quadratic(i,i,c)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8f8f8;strokeColor=#999999;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="720" y="210" width="320" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="addquad" value="add_quadratic(i,j,c)&#xa;1) bounds check&#xa;2) normalize (a,b) with a&lt;=b&#xa;3) accumulate Q[(a,b)] += c" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8f8f8;strokeColor=#999999;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="720" y="300" width="320" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="addoff" value="add_offset(c)&#xa;offset += c" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8f8f8;strokeColor=#999999;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="720" y="420" width="320" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="energy" value="energy(x)&#xa;1) check len(x)==n&#xa;2) total = offset&#xa;3) for (i,j),c in Q: total += c*x[i]*x[j]&#xa;4) return total" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="220" width="360" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="exact" value="ExactSolver.solve(problem)&#xa;if n &gt; max_n -&gt; error&#xa;for mask in range(2^n):&#xa;  build x&#xa;  e = problem.energy(x)&#xa;  keep best" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="390" width="360" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="result2" value="Result dataclass&#xa;best_x, best_energy, info={method: exact_bruteforce}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="560" width="360" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="decode2" value="VariableMap.decode(best_x)&#xa;returns active variable keys (human-meaningful assignment)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="720" y="560" width="320" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="notes" value="Important: linear terms are stored on diagonal (i,i).&#xa;So energy() can use one uniform sum over Q." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce5cd;strokeColor=#d79b00;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="420" y="240" width="240" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="r1" value="encode()" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="vm" target="xvec">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r2" value="x used by energy()" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="xvec" target="energy">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r3" value="creates / mutates" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="addlin" target="qubo2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="addquad" target="qubo2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="addoff" target="qubo2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r6" value="reads n,Q,offset" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="qubo2" target="energy">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r7" value="calls repeatedly" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="exact" target="energy">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r8" value="solve(problem)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="qubo2" target="exact">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="exact" target="result2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r10" value="best_x" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="result2" target="decode2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r11" value="decode()" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="vm" target="decode2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r12" value="delegates" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;endArrow=block;endFill=1;" edge="1" parent="1" source="addlin" target="addquad">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
